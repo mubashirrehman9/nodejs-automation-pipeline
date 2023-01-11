@@ -1,0 +1,83 @@
+<style>
+    #uploadForm {
+        padding-top: 20px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    input.btn {
+        flex: 0.8;
+    }
+
+    button.btn {
+        flex: 0.15;
+    }
+    #main-progress-bar {
+        display: none;
+    }
+</style>
+</head>
+
+<h1 class="mt-4">Dashboard</h1>
+<p class="lead mb-3">Welcome <%= name %>
+</p>
+<a href="/auth/logout" class="btn btn-secondary">Logout</a>
+
+<div class="container p-0 mt-2">
+    <form method="post" enctype="multipart/form-data" onsubmit="UploadZip(event)">
+        <input type="file" name="uebuild" class="btn btn-primary" id="file" multiple required>
+        <button class="btn btn-primary" type="submit" style="border-radius: 4px;">
+            Upload
+        </button>
+    </form>
+    <div class="container p-0 mt-2">
+        <div class="progress" id="main-progress-bar">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" id="progress-bar" role="progressbar" aria-valuenow="75"
+                aria-valuemin="0" aria-valuemax="100" style="width: 50%">0%</div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.2/axios.min.js"
+    integrity="sha512-QTnb9BQkG4fBYIt9JGvYmxPpd6TBeKp6lsUrtiVQsrJ9sb33Bn9s0wMQO9qVBFbPX3xHRAsBHvXlcsrnJjExjg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script type="text/javascript">
+
+    var uploadFile = document.querySelector('#file');
+    let formData = new FormData();
+    let progressbar = document.getElementById('progress-bar')
+    let mainProgressBar = document.getElementById('main-progress-bar')
+
+    const UploadZip = (event) => {
+        
+        event.preventDefault()
+        let formData = new FormData();
+        console.log(formData);
+        formData.append("uebuild", uploadFile.files[0]);
+        mainProgressBar.style.display = 'flex'
+        axios.post('/upload', formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            onUploadProgress: (event) => {
+                const percentage = Math.round((100 * event.loaded) / event.total);
+                console.log(percentage);
+
+                progressbar.style.width = percentage + '%'
+                progressbar.textContent = percentage + '%'
+                  console.log(percentage + '% loaded');
+                  if (percentage == 100) {
+                     setTimeout(() => {
+                        mainProgressBar.style.display = 'none'
+                     }, 500)
+                 }
+
+
+            }
+        }).then(res => {
+            document.getElementById("file").value = "";
+
+        });
+
+    }
+
+</script>
