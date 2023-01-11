@@ -54,13 +54,13 @@ exports.registerHandle = (req, res) => {
             } else {
 
                 const oauth2Client = new OAuth2(
-                    "401359289845-1te8k5rqqf9ifnson4j5k8csjfrj1jje.apps.googleusercontent.com", // ClientID
-                    "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", // Client Secret
-                    "https://developers.google.com/oauthplayground" // Redirect URL
+                    process.env.ClientID,
+                    process.env.ClientSecret, // Client Secret
+                    process.env.RedirectURL // Redirect URL
                 );
 
                 oauth2Client.setCredentials({
-                    refresh_token: "1//042qflNpfVvO5CgYIARAAGAQSNwF-L9Ir6nKvBrYh7DVtJh7MIJk5IJP7BmdFCI7bX1j4-G1q4AKrttiVd212k_QjEYb4um3va5g"
+                    refresh_token:process.env.refreshToken 
                 });
                 const accessToken = oauth2Client.getAccessToken()
 
@@ -77,10 +77,10 @@ exports.registerHandle = (req, res) => {
                     service: 'gmail',
                     auth: {
                         type: "OAuth2",
-                        user: "brotherqureshi123456789@gmail.com",
-                        clientId: "401359289845-1te8k5rqqf9ifnson4j5k8csjfrj1jje.apps.googleusercontent.com",
-                        clientSecret: "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",
-                        refreshToken: "1//042qflNpfVvO5CgYIARAAGAQSNwF-L9Ir6nKvBrYh7DVtJh7MIJk5IJP7BmdFCI7bX1j4-G1q4AKrttiVd212k_QjEYb4um3va5g",
+                        user: process.env.userEmail,
+                        clientId:  process.env.ClientID,
+                        clientSecret:  process.env.ClientSecret,
+                        refreshToken: process.env.refreshToken ,
                         accessToken: accessToken
                     },
                 });
@@ -203,9 +203,9 @@ exports.forgotPassword = (req, res) => {
             } else {
 
                 const oauth2Client = new OAuth2(
-                    "173872994719-pvsnau5mbj47h0c6ea6ojrl7gjqq1908.apps.googleusercontent.com", // ClientID
-                    "OKXIYR14wBB_zumf30EC__iJ", // Client Secret
-                    "https://developers.google.com/oauthplayground" // Redirect URL
+                    process.env.ClientID,
+                    process.env.ClientSecret, // Client Secret
+                    process.env.RedirectURL // Redirect URL
                 );
 
                 oauth2Client.setCredentials({
@@ -234,10 +234,10 @@ exports.forgotPassword = (req, res) => {
                             service: 'gmail',
                             auth: {
                                 type: "OAuth2",
-                                user: "brotherqureshi123456789@gmail.com",
-                                clientId: "401359289845-1te8k5rqqf9ifnson4j5k8csjfrj1jje.apps.googleusercontent.com",
-                                clientSecret: "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",
-                                refreshToken: "1//04vtcaD0PUmi3CgYIARAAGAQSNwF-L9IrjQoRbUgRx4kxdD71I4P01Jcu1L3KTsOk-CFSOcVlKmZYXxaFuup2UTsLVIUXeVnJLwc",
+                                user: process.env.userEmail,
+                                clientId:  process.env.ClientID,
+                                clientSecret:  process.env.ClientSecret,
+                                refreshToken: process.env.refreshToken ,
                                 accessToken: accessToken
                             },
                         });
