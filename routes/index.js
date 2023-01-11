@@ -37,6 +37,11 @@ router.post('/upload', ensureAuthenticated, function (req, res, next) {
         if (err) {
             return res.end("Something went wrong:(");
         }
+
+        if (!fs.existsSync('./buildversion')) {
+            fs.mkdirSync(dir);
+        }
+      
         const uploadDir = path.join(__dirname, '../', 'uploads')
         const buildversionDir = path.join(__dirname, '../', 'buildversion')
         const liveserverDir = path.join(__dirname, '../', 'liveserver')
