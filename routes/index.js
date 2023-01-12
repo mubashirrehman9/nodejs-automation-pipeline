@@ -2,6 +2,8 @@ let fs = require('fs');
 let path = require('path');
 const express = require('express');
 var app = express();
+var os = require("os");
+var ip = require("ip");
 
 const router = express.Router();
 var multer = require('multer');
@@ -38,34 +40,44 @@ router.post('/upload', ensureAuthenticated, function (req, res, next) {
             return res.end("Something went wrong:(");
         }
 
-        if (!fs.existsSync('./buildversion')) {
-            fs.mkdirSync(dir);
-        }
-      
+
         const uploadDir = path.join(__dirname, '../', 'uploads')
         const buildversionDir = path.join(__dirname, '../', 'buildversion')
-        const liveserverDir = path.join(__dirname, '../', 'liveserver')
+        const liveserverDir = path.join(__dirname, '../', '../', 'SignallingWebServer', 'Game')
         const buildversionFolder = fs.readdirSync(buildversionDir);
         const uploadedFiles = fs.readdirSync(uploadDir)
         const mainUploadFile = path.join(uploadDir, uploadedFiles[0])
-
+        if (!fs.existsSync(buildversionDir)) {
+            fs.mkdirSync(buildversionDir);
+        }
 
         await fsExtea.copy(liveserverDir, path.join(buildversionDir, 'buildV' + (buildversionFolder.length + 1)))
         fs.rmSync(liveserverDir, { recursive: true, force: true });
-        var dir = './liveserver';
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir);
+
+        if (!fs.existsSync(liveserverDir)) {
+            fs.mkdirSync(liveserverDir);
         }
         decompress(mainUploadFile, liveserverDir)
             .then((files) => {
                 console.log(files);
                 fs.unlinkSync(mainUploadFile)
+                // var hostname = os.hostname;
+
+                res.end(JSON.stringify({
+                    result: "Upload completed.",
+                    url: ip.address()
+                }));
 
             })
             .catch((error) => {
+                res.status(400).send({
+                    message: 'This is an error!'
+                });
+                // res.end("Upload completed.");
+
                 console.log(error);
             });
-        res.end("Upload completed.");
+
     });
 })
 
