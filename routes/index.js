@@ -38,9 +38,7 @@ router.post('/upload', ensureAuthenticated, function (req, res, next) {
             return res.end("Something went wrong:(");
         }
 
-        if (!fs.existsSync('./buildversion')) {
-            fs.mkdirSync(dir);
-        }
+       
       
         const uploadDir = path.join(__dirname, '../', 'uploads')
         const buildversionDir = path.join(__dirname, '../', 'buildversion')
@@ -48,7 +46,9 @@ router.post('/upload', ensureAuthenticated, function (req, res, next) {
         const buildversionFolder = fs.readdirSync(buildversionDir);
         const uploadedFiles = fs.readdirSync(uploadDir)
         const mainUploadFile = path.join(uploadDir, uploadedFiles[0])
-
+        if (!fs.existsSync(buildversionDir)) {
+            fs.mkdirSync(buildversionDir);
+        }
 
         await fsExtea.copy(liveserverDir, path.join(buildversionDir, 'buildV' + (buildversionFolder.length + 1)))
         fs.rmSync(liveserverDir, { recursive: true, force: true });
