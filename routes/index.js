@@ -44,7 +44,7 @@ router.post('/upload', ensureAuthenticated, function (req, res, next) {
       
         const uploadDir = path.join(__dirname, '../', 'uploads')
         const buildversionDir = path.join(__dirname, '../', 'buildversion')
-        const liveserverDir = path.join(__dirname, '../', 'liveserver')
+        const liveserverDir = path.join(__dirname, '../','../','SignallingWebServer', 'Game')
         const buildversionFolder = fs.readdirSync(buildversionDir);
         const uploadedFiles = fs.readdirSync(uploadDir)
         const mainUploadFile = path.join(uploadDir, uploadedFiles[0])
@@ -52,9 +52,9 @@ router.post('/upload', ensureAuthenticated, function (req, res, next) {
 
         await fsExtea.copy(liveserverDir, path.join(buildversionDir, 'buildV' + (buildversionFolder.length + 1)))
         fs.rmSync(liveserverDir, { recursive: true, force: true });
-        var dir = './liveserver';
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir);
+        
+        if (!fs.existsSync(liveserverDir)) {
+            fs.mkdirSync(liveserverDir);
         }
         decompress(mainUploadFile, liveserverDir)
             .then((files) => {
