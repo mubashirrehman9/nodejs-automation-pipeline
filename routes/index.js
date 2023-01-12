@@ -53,7 +53,7 @@ router.post('/upload', ensureAuthenticated, function (req, res, next) {
 
         await fsExtea.copy(liveserverDir, path.join(buildversionDir, 'buildV' + (buildversionFolder.length + 1)))
         fs.rmSync(liveserverDir, { recursive: true, force: true });
-
+        
         if (!fs.existsSync(liveserverDir)) {
             fs.mkdirSync(liveserverDir);
         }
