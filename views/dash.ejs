@@ -12,31 +12,253 @@
     button.btn {
         flex: 0.15;
     }
+
     #main-progress-bar {
         display: none;
+    }
+
+    * {
+        border: 0;
+        outline: 0;
+    }
+
+    label#largeFile:after {
+        position: absolute;
+        width: 60%;
+        max-width: 800px;
+        content: "Upload your file";
+        left: 0;
+        right: 0;
+        margin: 50px auto;
+        text-align: center;
+        padding: 50px 0px 50px 0px;
+        border-radius: 10px;
+        border: 5px dashed #ccc;
+        color: #ccc;
+        font-family: "Helvetica Neue", Helvetica, Arial;
+        font-size: 30px;
+    }
+
+    label#largeFile:hover:after {
+        background: #ccc;
+        color: #fff;
+        cursor: pointer;
+    }
+
+
+    label#largeFile input#file {
+        width: 0px;
+        height: 0px;
+    }
+
+    .hiddeninput {
+        position: absolute;
+        width: 60% !important;
+        max-width: 800px;
+        content: "Upload your file";
+        left: 0;
+        right: 0;
+        margin: 50px auto;
+        text-align: center;
+        padding: 50px 0px 50px 0px;
+        border-radius: 10px;
+        border: 5px dashed #ccc;
+        color: #ccc;
+        font-family: "Helvetica Neue", Helvetica, Arial;
+        font-size: 30px;
+        display: none;
+    }
+
+    .file {
+        display: inline-block;
+        position: relative;
+        width: 100%;
+        font-size: 1.4rem;
+        border-width: 5px;
+        border-style: dashed;
+        border-color: gray;
+        border-radius: 20px;
+    }
+
+    .file input[type=file] {
+        cursor: pointer;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        opacity: 0;
+    }
+
+    .file input[type=file].error~.dropzone {
+        border-color: red;
+    }
+
+    .file input[type=file].error~.msg-error {
+        display: block;
+    }
+
+    .file input[type=file].valid+.dropzone {
+        border-color: green;
+    }
+
+    .file .dropzone {
+        border: 1px solid rgba(0, 0, 30, 0.2);
+        border-radius: 20px;
+        height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 20px;
+        user-select: none;
+        width: 100%;
+    }
+
+    .file .error-msg {
+        position: absolute;
+        top: 100%;
+        text-align: left;
+        white-space: nowrap;
+        left: 0;
+    }
+
+    .file .btn-remove {
+        background: none;
+        border: none;
+        display: none;
+        font-weight: 800;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+
+    .file .btn-remove:before {
+        content: 'X';
+    }
+
+    .file.dragover .dropzone {
+        background: rgb(23, 23, 23);
+    }
+
+    .file.hasFile .msg {
+        display: none;
+
+    }
+
+    .file.hasFile .dropzone {
+        background: rgb(23, 23, 23);
+    }
+
+    .file.hasFile .btn-remove {
+        display: inline-flex;
+    }
+
+    .file.hasFile input[type=file] {
+        display: none;
+    }
+
+    .file .loader {
+        border: 1px solid rgba(0, 0, 30, 0.2);
+        border-radius: 6px;
+        display: none;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 1.4rem;
+        padding: 20px;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        background: #fff;
+    }
+
+    .file .loader .progress {
+        position: absolute;
+        height: 100%;
+        left: 0;
+        top: 0;
+        background: rgba(120, 190, 32, 0.2);
+        width: 0;
+        transition: width 0.3s linear;
+    }
+
+    .file.loading .loader {
+        display: flex;
+    }
+
+    .loading {
+        animation: extend 1s steps(3, end) infinite;
+        display: inline-block;
+        overflow: hidden;
+        vertical-align: bottom;
+    }
+
+    .loading:before {
+        content: "...";
+    }
+
+    @keyframes extend {
+        0% {
+            width: 0.18em;
+        }
+
+        100% {
+            width: 1em;
+        }
     }
 </style>
 </head>
 
-<h1 class="mt-4">Dashboard</h1>
+<div class="mx-auto w-100 d-flex justify-content-between">
+    <h1 class="mt-4">Dashboard</h1>
+    <span class="align-self-end mb-3">
+        <a href="/auth/logout" class="btn btn-secondary">Logout</a>
+    </span>
+</div>
 <p class="lead mb-3">Welcome <%= name %>
 </p>
-<a href="/auth/logout" class="btn btn-secondary">Logout</a>
 
 <div class="container p-0 mt-2">
-    <form method="post" enctype="multipart/form-data" onsubmit="UploadZip(event)">
-        <input type="file" name="uebuild" class="btn btn-primary" id="file" multiple required>
-        <button class="btn btn-primary" type="submit" style="border-radius: 4px;">
-            Upload
-        </button>
-    </form>
+    <div class="row">
+        <div class="col-12">
+            <form id="inputform" method="post" enctype="multipart/form-data" onsubmit="UploadZip(event)">
+                <!-- <label id="largeFile" for="file">
+                    <input type="file" name="uebuild" class="hiddeninput" id="file" required />
+                </label> -->
+                <!-- <input type="file" name="uebuild" class="btn btn-primary h-50 w-100 p-5" id="file" multiple required> -->
+                <div class="file">
+                    <input type="file" name="uebuild" id="file" required>
+                    <div class="dropzone">
+                        <div class="msg">Select yout file</div>
+                        <div class="name"></div>
+                        <button type="button" style="color: white;" class="btn-remove"></button>
+                        <div class="loader">
+                            <div class="progress"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-100 text-right">
+                    <button class="btn btn-primary mt-2" type="submit" style="border-radius: 4px;">
+                        Upload
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
     <div class="container p-0 mt-2">
         <div class="progress" id="main-progress-bar">
-            <div class="progress-bar progress-bar-striped progress-bar-animated" id="progress-bar" role="progressbar" aria-valuenow="75"
-                aria-valuemin="0" aria-valuemax="100" style="width: 50%">0%</div>
+            <div class="progress-bar progress-bar-striped progress-bar-animated" id="progress-bar" role="progressbar"
+                aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 50%">0%</div>
+        </div>
+        <div id="mainloadingdiv" style="display: none; font-size: xxx-large;">
+            <div style="display: inline-flex">
+                <div id="loadingtext">Uploading</div>
+                <div>
+                    <span class="loading"></span>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="container p-0 mt-2 " id="urllink">
+    <div style="display: none;" class="container p-0 mt-2 " id="urllink">
+        Build Updated Successfully! Check your updated build at:  
     </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.2/axios.min.js"
@@ -49,9 +271,12 @@
     let progressbar = document.getElementById('progress-bar')
     let mainProgressBar = document.getElementById('main-progress-bar')
     let urllinkDom = document.getElementById('urllink')
+    let loading = document.getElementById('loadingtext')
+    let fileInputForm = document.getElementById('inputform')
+    let mainloadingdiv = document.getElementById('mainloadingdiv')
 
     const UploadZip = (event) => {
-        
+
         event.preventDefault()
         let formData = new FormData();
         console.log(formData);
@@ -64,28 +289,82 @@
             onUploadProgress: (event) => {
                 const percentage = Math.round((100 * event.loaded) / event.total);
                 console.log(percentage);
-
+                fileInputForm.style.display = "none";
+                mainloadingdiv.style.display = "block";
                 progressbar.style.width = percentage + '%'
                 progressbar.textContent = percentage + '%'
-                  console.log(percentage + '% loaded');
-                  if (percentage == 100) {
-                     setTimeout(() => {
-                        mainProgressBar.style.display = 'none'
-                     }, 500)
-                 }
+                console.log(percentage + '% loaded');
+                if (percentage == 100) {
+                    setTimeout(() => {
+                        // mainProgressBar.style.display = 'none'
+                        loading.style.display = "block";
+                        loading.innerHTML = "Extracting Please Wait";
+                    }, 500)
+                }
 
 
             }
         }).then(res => {
             document.getElementById("file").value = "";
+            fileInputForm.style.display = "block";
+            loading.style.display = "none";
+            mainProgressBar.style.display = "none";
+            mainloadingdiv.style.display = "none";
             const aTag = document.createElement('a')
-            aTag.appendChild(  document.createTextNode('http://'+res.data.url))
-            aTag.href = 'http://'+res.data.url
-            aTag.target = '_blank'
-            urllinkDom.appendChild(aTag)
+            aTag.appendChild(document.createTextNode('http://' + res.data.url))
+            aTag.href = 'http://' + res.data.url;
+            aTag.target = '_blank';
+            urllinkDom.appendChild(aTag);
+            urllinkDom.style.display = "block";
 
         });
 
     }
 
+</script>
+<script>
+    const FormFileDragDrop = (params) => {
+        const files = params.form.querySelectorAll('.file');
+
+        for (let file of files) {
+            const input = file.querySelector('input[type="file"]');
+            const remove = file.querySelector('.btn-remove');
+            const name = file.querySelector('.name');
+
+            input.addEventListener('change', () => {
+                file.classList.add('hasFile');
+                if (input.files.item(0)) {
+                    name.innerText = input.files.item(0).name;
+                }
+                file.classList.remove('dragover');
+                if (typeof params.onchange === 'function') params.onchange(file, input)
+            });
+            file.ondragover = () => file.classList.add('dragover');
+            file.ondragleave = () => file.classList.remove('dragover');
+            remove.addEventListener('click', () => {
+                if (typeof params.onremove === 'function') params.onremove(file, input)
+                name.innerText = '';
+                input.value = '';
+                file.classList.remove('hasFile');
+            });
+
+            // if reload page set hasFile class if input have file
+            if (input.files.item(0)) {
+                file.classList.add('hasFile');
+                name.innerText = input.files.item(0).name;
+            }
+        }
+    };
+
+
+    /**/
+    FormFileDragDrop({
+        form: document.querySelector('form'),
+        onchange(file, input) {
+            console.log('onchange');
+        },
+        onremove(file, input) {
+            console.log('onremove');
+        },
+    });
 </script>
